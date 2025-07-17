@@ -1,5 +1,4 @@
-from .views import list_books, LibraryDetailView
-from django.views.generic import TemplateView
+from .views import list_books, LibraryDetailView, RegisterView, LoginView
 from django.urls import path, include
 from django.contrib.auth.views import LoginView
 
@@ -8,6 +7,6 @@ urlpatterns = [
     path('library/<int:pk>/', LibraryDetailView.as_view(), name='library_detail'),
     
     path('login/', LoginView.as_view(), name='login'),
-    path('register/', TemplateView.as_view(template_name='relationship_app/register.html'), name='register'),
-    path('', include('django.contrib.auth.urls')),  # Keep at the bottom
+    path('register/', RegisterView.as_view(), name='register'),
+    path('', include('django.contrib.auth.urls')), # Includes default auth URLs like login, logout, password change, etc.
 ]
