@@ -26,7 +26,8 @@ def get_books_in_library(library_name):
 def get_librarian_in_library(library_name):
     try:
         library = Library.objects.get(name=library_name)
-        librarian = library.librarian.first()
+        librarian = Librarian.objects.get(library=library)  # Assuming a OneToOneField from Librarian to Library
+
         if librarian:
             print(f'Librarian for {library_name} is: {librarian}')
         else:
