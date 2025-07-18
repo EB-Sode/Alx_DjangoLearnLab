@@ -13,7 +13,7 @@ from django.http import HttpResponse
 # Create your views here.
 def list_books(request):
     books= Book.objects.all()
-    return render(request, 'relationship_app/list_books.html', {'books': books})
+    return render(request, 'list_books.html', {'books': books})
 
 class LibraryDetailView(DetailView):
     model = Library
@@ -25,15 +25,15 @@ class LoginView(DjangoLoginView):
     template_name = 'relationship_app/login.html'
 
 
-class Register(CreateView):
-    form_class = UserCreationForm
-    template_name = 'relationship_app/register.html'
-    success_url = reverse_lazy('login')  # Redirect after successful registration
+# class Register(CreateView):
+#     form_class = UserCreationForm
+#     template_name = 'relationship_app/register.html'
+#     success_url = reverse_lazy('login')  # Redirect after successful registration
 
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)  # Log the user in after registration
-        return super().form_valid(form)
+#     def form_valid(self, form):
+#         user = form.save()
+#         login(self.request, user)  # Log the user in after registration
+#         return super().form_valid(form)
     
 def register(request):
     if request.method == 'POST':
@@ -41,28 +41,29 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)  # Log the user in after registration
-            return redirect('list_books')  # Redirect to the book list after registration
+            return redirect('relationship_app:list_books')  # Redirect to the book list after registration
     else:
         form = UserCreationForm()
     return render(request, 'relationship_app/register.html', {'form': form})
 
+
 def is_admin(user):
     return hasattr(user, 'profile') and user.profile.role == 'Admin'
+
+def is_librarian(user):
+    return hasattr(user, 'profile') and user.profile.role == 'Librarian'
+
+def is_member(user):
+    return hasattr(user, 'profile') and user.profile.role == 'Member'
 
 @user_passes_test(is_admin)
 def admin_view(request):
     return HttpResponse("Welcome, Admin! This is the admin-only view.")
 
-def is_librarian(user):
-    return hasattr(user, 'profile') and user.profile.role == 'Librarian'
 @user_passes_test(is_librarian)
-
 def librarian_view(request):
     return HttpResponse("Welcome, Librarian! This is the Librarian-only view.")
 
-def is_member(user):
-    return hasattr(user, 'profile') and user.profile.role == 'Member'
 @user_passes_test(is_member)
-
 def member_view(request):
     return HttpResponse("Welcome, Member! This is the member-only view.")
