@@ -49,30 +49,42 @@ def register(request):
     return render(request, 'relationship_app/register.html', {'form': form})
 
 
-# def is_admin(user):
-#     return hasattr(user, 'profile') and user.profile.role == 'Admin'
+def is_admin(user):
+    return hasattr(user, 'profile') and user.profile.role == 'Admin'
 
-# def is_librarian(user):
-#     return hasattr(user, 'profile') and user.profile.role == 'Librarian'
+def is_librarian(user):
+    return hasattr(user, 'profile') and user.profile.role == 'Librarian'
 
-# def is_member(user):
-#     return hasattr(user, 'profile') and user.profile.role == 'Member'
+def is_member(user):
+    return hasattr(user, 'profile') and user.profile.role == 'Member'
 
-def check_user_role(role):
-    def inner(user):
-        return (user.is_authenticated 
-                and hasattr(user, 'userprofile') 
-                and user.userprofile.role == role)
-    return inner
+# def check_user_role(role):
+#     def inner(user):
+#         return (user.is_authenticated 
+#                 and hasattr(user, 'userprofile') 
+#                 and user.userprofile.role == role)
+#     return inner
 
-@user_passes_test(check_user_role('Admin'))
+# @user_passes_test(check_user_role('Admin'))
+# def admin_view(request):
+#     return render(request, 'relationship_app/admin_view.html')
+
+# @user_passes_test(check_user_role('Librarian'))
+# def librarian_view(request):
+#     return render(request, 'relationship_app/librarian_view.html')
+
+# @user_passes_test(check_user_role('Member'))
+# def member_view(request):
+#     return render(request, 'relationship_app/member_view.html')
+
+@user_passes_test(is_admin)
 def admin_view(request):
     return render(request, 'relationship_app/admin_view.html')
 
-@user_passes_test(check_user_role('Librarian'))
+@user_passes_test(is_librarian)
 def librarian_view(request):
     return render(request, 'relationship_app/librarian_view.html')
 
-@user_passes_test(check_user_role('Member'))
+@user_passes_test(is_member)
 def member_view(request):
     return render(request, 'relationship_app/member_view.html')
