@@ -56,11 +56,13 @@ def admin_view(request):
 def is_librarian(user):
     return hasattr(user, 'profile') and user.profile.role == 'Librarian'
 @user_passes_test(is_librarian)
+
 def librarian_view(request):
-    return HttpResponse("Welcome, Librariran! This is the Librarian-only view")
+    return HttpResponse("Welcome, Librarian! This is the Librarian-only view.")
 
 def is_member(user):
     return hasattr(user, 'profile') and user.profile.role == 'Member'
 @user_passes_test(is_member)
+
 def member_view(request):
     return HttpResponse("Welcome, Member! This is the member-only view.")
