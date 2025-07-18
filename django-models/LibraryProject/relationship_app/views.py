@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from .models import Library, Book
 from django.views.generic.detail import DetailView
 from django.contrib.auth import views as auth_views
@@ -33,3 +33,14 @@ class Register(CreateView):
         user = form.save()
         login(self.request, user)  # Log the user in after registration
         return super().form_valid(form)
+    
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)  # Log the user in after registration
+            return redirect('list_books')  # Redirect to the book list after registration
+    else:
+        form = UserCreationForm()
+    return render(request, 'relationship_app/register.html', {'form': form})

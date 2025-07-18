@@ -10,7 +10,8 @@ urlpatterns = [
 
     path('login/', views.LoginView.as_view(template_name='relationship_app/login.html'), name='login'),
     path('logout/', views.LogoutView.as_view(template_name='relationship_app/logout.html'), name='logout'),
-    path('register/', views.Register, name='register'),
-
+    path('register/', views.register, name='register'),
+    path('register/', views.Register.as_view(), name='register'),
+    # Include the default auth URLs for login, logout, password management, etc.
     path('', include('django.contrib.auth.urls')),
 ]
