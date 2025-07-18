@@ -8,7 +8,6 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import login
 from django.views.generic.edit import CreateView
 from django.contrib.auth.decorators import user_passes_test
-from django.http import HttpResponse
 
 # Create your views here.
 def list_books(request):
@@ -58,17 +57,19 @@ def register(request):
 
 def check_user_role(role):
     def inner(user):
-        return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == role
+        return (user.is_authenticated 
+                and hasattr(user, 'userprofile') 
+                and user.userprofile.role == role)
     return inner
 
 @user_passes_test(check_user_role('Admin'))
 def admin_view(request):
-    return render(request, 'relationship_app/admin_view.html', {'user': request.user})
+    return render(request, 'relationship_app/admin_view.html')
 
 @user_passes_test(check_user_role('Librarian'))
 def librarian_view(request):
-    return render(request, 'relationship_app/librarian_view.html', {'user': request.user})
+    return render(request, 'relationship_app/librarian_view.html')
 
 @user_passes_test(check_user_role('Member'))
 def member_view(request):
-    return render(request, 'relationship_app/member_view.html', {'user': request.user})
+    return render(request, 'relationship_app/member_view.html')
