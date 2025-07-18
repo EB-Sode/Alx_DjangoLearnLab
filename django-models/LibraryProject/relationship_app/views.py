@@ -50,19 +50,19 @@ def is_admin(user):
     return hasattr(user, 'profile') and user.profile.role == 'Admin'
 
 @user_passes_test(is_admin)
-def admin_view(request):
+def admin_only(request):
     return HttpResponse("Welcome, Admin! This is the admin-only view.")
 
 def is_librarian(user):
     return hasattr(user, 'profile') and user.profile.role == 'Librarian'
 @user_passes_test(is_librarian)
 
-def librarian_view(request):
+def librarian_only(request):
     return HttpResponse("Welcome, Librarian! This is the Librarian-only view.")
 
 def is_member(user):
     return hasattr(user, 'profile') and user.profile.role == 'Member'
 @user_passes_test(is_member)
 
-def member_view(request):
+def member_only(request):
     return HttpResponse("Welcome, Member! This is the member-only view.")
