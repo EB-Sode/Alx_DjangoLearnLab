@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import user_passes_test
 # Create your views here.
 def list_books(request):
     books= Book.objects.all()
-    return render(request, 'list_books.html', {'books': books})
+    return render(request, 'relationship_app/list_books.html', {'books': books})
 
 class LibraryDetailView(DetailView):
     model = Library
@@ -22,6 +22,9 @@ class LoginView(DjangoLoginView):
     form_class = AuthenticationForm
     success_url = reverse_lazy('register')
     template_name = 'relationship_app/login.html'
+
+class LogoutView(auth_views.LogoutView):
+    template_name = 'relationship_app/logout.html'
 
 
 # class Register(CreateView):
