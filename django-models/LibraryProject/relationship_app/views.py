@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from .models import Library, Book
 from django.views.generic.detail import DetailView
 from django.contrib.auth import views as auth_views
@@ -7,12 +7,52 @@ from django.contrib.auth.views import LoginView as DjangoLoginView
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import login
 from django.views.generic.edit import CreateView
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test, permission_required
 
 # Create your views here.
 def list_books(request):
     books= Book.objects.all()
     return render(request, 'relationship_app/list_books.html', {'books': books})
+
+@permission_required('relationship_app.add_view_books')
+def add_book(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        author = request.POST.get('author')
+        if title and author:
+            Book.objects.create(title=title, author=author)
+            return redirect('list_books')  # Adjust to your book list view name
+        else:
+            error = "Both title and author are required."
+            return render(request, 'relationship_app/add_book.html', {'error': error})
+    return render(request, 'relationship_app/add_book.html')
+    
+
+@permission_required('relationship_app.can_change_books')
+def change_book(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        author = request.POST.get('author')
+        if title and author:
+            book.title = title
+            book.author = author
+            book.save()
+            return redirect('list_books')
+        else:
+            error = "Both title and author are required."
+            return render(request, 'relationship_app/add_book.html', {'error': error})
+    return render(request, 'relationship_app/edit_book.html')
+
+@permission_required('relationship_app.can_delete_books')
+def delete_book(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    if request.method == 'POST':
+        book.delete()
+        return redirect('list_books')
+    return render(request, 'relationship_app/delete_book.html', {'book': book})
+
+
 
 class LibraryDetailView(DetailView):
     model = Library
@@ -88,3 +128,4 @@ def librarian_view(request):
 @user_passes_test(is_member)
 def member_view(request):
     return render(request, 'relationship_app/member_view.html')
+
