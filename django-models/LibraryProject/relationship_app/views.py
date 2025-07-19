@@ -15,7 +15,7 @@ def list_books(request):
     books= Book.objects.all()
     return render(request, 'relationship_app/list_books.html', {'books': books})
 
-@permission_required('relationship_app.add_view_books')
+@permission_required('relationship_app.can_add_books')
 def add_book(request):
     if request.method == 'POST':
         title = request.POST.get('title')
