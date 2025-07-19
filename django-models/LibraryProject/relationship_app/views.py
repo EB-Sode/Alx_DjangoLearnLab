@@ -7,7 +7,8 @@ from django.contrib.auth.views import LoginView as DjangoLoginView
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import login
 from django.views.generic.edit import CreateView
-from django.contrib.auth.decorators import user_passes_test, permission_required
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import permission_required
 
 # Create your views here.
 def list_books(request):
@@ -26,7 +27,6 @@ def add_book(request):
             error = "Both title and author are required."
             return render(request, 'relationship_app/add_book.html', {'error': error})
     return render(request, 'relationship_app/add_book.html')
-    
 
 @permission_required('relationship_app.can_change_books')
 def change_book(request, book_id):
