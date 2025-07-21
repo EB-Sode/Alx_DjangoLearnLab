@@ -78,7 +78,7 @@ class LogoutView(auth_views.LogoutView):
 #         login(self.request, user)  # Log the user in after registration
 #         return super().form_valid(form)
     
-def registration(request):
+def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
