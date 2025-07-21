@@ -5,10 +5,11 @@ from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView as DjangoLoginView
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.views.generic.edit import CreateView
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.forms import UserCreationForm
 
 # Create your views here.
 def list_books(request):
@@ -77,7 +78,7 @@ class LogoutView(auth_views.LogoutView):
 #         login(self.request, user)  # Log the user in after registration
 #         return super().form_valid(form)
     
-def register(request):
+def registration(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
