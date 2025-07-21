@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView as DjangoLoginView
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import login, logout
+from django.views.generic.edit import CreateView
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.forms import UserCreationForm
