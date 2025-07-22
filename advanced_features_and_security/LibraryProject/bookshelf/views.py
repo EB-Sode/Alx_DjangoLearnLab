@@ -16,8 +16,8 @@ def list_books(request):
     books= Book.objects.all()
     return render(request, 'relationship_app/list_books.html', {'books': books})
 
-@permission_required('bookshelf.can_add_books', raise_exception= True)
-def add_book(request):
+@permission_required('bookshelf.can_create_books', raise_exception= True)
+def create_book(request):
     if request.method == 'POST':
         title = request.POST.get('title')
         author = request.POST.get('author')
