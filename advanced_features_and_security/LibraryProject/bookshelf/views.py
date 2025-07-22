@@ -11,11 +11,12 @@ from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.forms import UserCreationForm
 
 # Create your views here.
+@permission_required('bookshelf.can_view_books')
 def list_books(request):
     books= Book.objects.all()
     return render(request, 'relationship_app/list_books.html', {'books': books})
 
-@permission_required('relationship_app.can_add_books')
+@permission_required('bookshelf.can_add_books', raise_exception= True)
 def add_book(request):
     if request.method == 'POST':
         title = request.POST.get('title')
@@ -28,8 +29,8 @@ def add_book(request):
             return render(request, 'relationship_app/add_book.html', {'error': error})
     return render(request, 'relationship_app/add_book.html')
 
-@permission_required('relationship_app.can_change_books')
-def change_book(request, book_id):
+@permission_required('bookshelf.can_edit_books', raise_exception=True)
+def edit_book(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     if request.method == 'POST':
         title = request.POST.get('title')
@@ -42,9 +43,9 @@ def change_book(request, book_id):
         else:
             error = "Both title and author are required."
             return render(request, 'relationship_app/add_book.html', {'error': error})
-    return render(request, 'relationship_app/edit_book.html')
+    return render(request, 'relationship_app/edit_book.html', {'book': book})
 
-@permission_required('relationship_app.can_delete_books')
+@permission_required('bookshelf.can_delete_books')
 def delete_book(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     if request.method == 'POST':

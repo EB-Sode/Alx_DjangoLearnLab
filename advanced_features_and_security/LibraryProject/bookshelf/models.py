@@ -25,7 +25,7 @@ class Book(models.Model):
         permissions = (
             ("can_view_books", "Can view books"),
             ("can_add_books", "Can add books"),
-            ("can_change_books", "Can change books"),
+            ("can_edit_books", "Can edit books"),
             ("can_delete_books", "Can delete books"),
         )
 
@@ -74,7 +74,6 @@ class CustomUser(AbstractUser):
         ('Member', 'Member'),
     ]
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='Member')
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name= 'profile')
     date_of_birth = models.DateField(null=True, blank=True)
     profile_photo = models.ImageField(upload_to='profile_photos/', null=True, blank=True)
 
@@ -83,11 +82,11 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return f"{self.username} - {self.role}"
     
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        CustomUser.objects.create(user=instance)
+# @receiver(post_save, sender=User)
+# def create_user_profile(sender, instance, created, **kwargs):
+#     if created:
+#         CustomUser.objects.create(user=instance)
 
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
+# @receiver(post_save, sender=User)
+# def save_user_profile(sender, instance, **kwargs):
+#     instance.profile.save()
