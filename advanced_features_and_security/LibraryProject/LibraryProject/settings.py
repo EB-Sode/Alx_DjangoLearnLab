@@ -23,9 +23,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^y#s1=*7d(%-%s3w&8*eb#$18h-k7w7z40&7@)$zoa6xyqf4z='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
+
+# Enables XSS filtering in browsers
+SECURE_BROWSER_XSS_FILTER = True  
+
+ # Prevents clickjacking by blocking iframes
+X_FRAME_OPTIONS = 'DENY' 
+
+# Prevents MIME-type sniffing
+SECURE_CONTENT_TYPE_NOSNIFF = True  
+
+CSRF_COOKIE_SECURE = True  # CSRF cookie sent only over HTTPS
+SESSION_COOKIE_SECURE = True  # Session cookie sent only over HTTPS
 
 
 # Application definition
@@ -39,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bookshelf',
     'relationship_app',
+    'csp',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware',
 ]
 
 ROOT_URLCONF = 'LibraryProject.urls'

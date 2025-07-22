@@ -83,11 +83,10 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)  # Log the user in after registration
-            return redirect('relationship_app:list_books')  # Redirect to the book list after registration
+            return redirect('bookshelf:list_books')  # Redirect to the book list after registration
     else:
         form = UserCreationForm()
-    return render(request, 'relationship_app/register.html', {'form': form})
-
+    return render(request, 'bookshelf/register.html', {'form': form})
 
 def is_admin(user):
     return user.role == 'Admin'
