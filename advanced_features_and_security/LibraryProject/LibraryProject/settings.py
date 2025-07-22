@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-^y#s1=*7d(%-%s3w&8*eb#$18h-k7w7z40&7@)$zoa6xyqf4z=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 # Enables XSS filtering in browsers
 SECURE_BROWSER_XSS_FILTER = True  
@@ -37,7 +37,7 @@ X_FRAME_OPTIONS = 'DENY'
 SECURE_CONTENT_TYPE_NOSNIFF = True  
 
 CSRF_COOKIE_SECURE = True  # CSRF cookie sent only over HTTPS
-SESSION_COOKIE_SECURE = True  # Session cookie sent only over HTTPS
+SESSION_COOKIE_SECURE = False  # Session cookie sent only over HTTPS
 
 
 # Application definition
@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bookshelf',
-    'relationship_app',
     'csp',
 ]
 
@@ -139,6 +138,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'bookshelf.CustomUser'
 
-LOGIN_URL = 'relationship_app:login'
-LOGIN_REDIRECT_URL = 'relationship_app:list_books'
-LOGOUT_REDIRECT_URL = 'relationship_app:login'
+LOGIN_URL = 'bookshelf:login'
+LOGIN_REDIRECT_URL = 'bookshelf:list_books'
+LOGOUT_REDIRECT_URL = 'bookshelf:login'

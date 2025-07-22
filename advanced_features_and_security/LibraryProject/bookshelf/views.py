@@ -8,14 +8,14 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.decorators import permission_required
-from .forms import CustomUserCreationForm 
+from .forms import ExampleForm 
 
 
 # Create your views here.
 @permission_required('bookshelf.can_view_books')
 def book_list(request):
     books= Book.objects.all()
-    return render(request, 'bookshelf/list_books.html', {'books': books})
+    return render(request, 'bookshelf/book_list.html', {'books': books})
 
 @permission_required('bookshelf.can_create_books', raise_exception= True)
 def create_book(request):
@@ -24,7 +24,7 @@ def create_book(request):
         author = request.POST.get('author')
         if title and author:
             Book.objects.create(title=title, author=author)
-            return redirect('list_books')  # Adjust to your book list view name
+            return redirect('book_list')  # Adjust to your book list view name
         else:
             error = "Both title and author are required."
             return render(request, 'bookshelf/add_book.html', {'error': error})
@@ -40,7 +40,7 @@ def edit_book(request, book_id):
             book.title = title
             book.author = author
             book.save()
-            return redirect('list_books')
+            return redirect('book_list')
         else:
             error = "Both title and author are required."
             return render(request, 'bookshelf/add_book.html', {'error': error})
@@ -51,7 +51,7 @@ def delete_book(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     if request.method == 'POST':
         book.delete()
-        return redirect('list_books')
+        return redirect('book_list')
     return render(request, 'bookshelf/delete_book.html', {'book': book})
 
 
@@ -81,14 +81,14 @@ class LogoutView(auth_views.LogoutView):
 
 def register(request):
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
+        form = ExampleForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)  # Log the user in after registration
-            return redirect('bookshelf:list_books')  # Redirect after registration
+            return redirect('bookshelf:book_list')  # Redirect after registration
     else:
-        form = CustomUserCreationForm()
-    return render(request, 'bookshelf/register.html', {'form': form})
+        form = ExampleForm()
+    return render(request, 'bookshelf/form_example.html', {'form': form})
 
 def is_admin(user):
     return user.role == 'Admin'
