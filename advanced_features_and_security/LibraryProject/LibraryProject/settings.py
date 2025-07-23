@@ -46,8 +46,8 @@ SESSION_COOKIE_SECURE = True  # Session cookie sent only over HTTPS
 SECURE_HSTS_SECONDS = 31536000
 
 #include all subdomains in the HSTS policy and allow preloading.
-SECURE_HSTS_INCLUDE_SUBDOMAIN = True
-SECURE_HSTS_RELOAD = True
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
 
 
 
