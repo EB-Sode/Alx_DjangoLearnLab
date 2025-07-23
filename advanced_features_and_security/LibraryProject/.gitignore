@@ -1,3 +1,5 @@
 cert.pem
 key.pem
 
+localhost-key.pem
+localhost.pem
