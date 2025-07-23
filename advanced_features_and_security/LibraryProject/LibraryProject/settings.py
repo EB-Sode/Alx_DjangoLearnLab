@@ -37,7 +37,18 @@ X_FRAME_OPTIONS = 'DENY'
 SECURE_CONTENT_TYPE_NOSNIFF = True  
 
 CSRF_COOKIE_SECURE = True  # CSRF cookie sent only over HTTPS
-SESSION_COOKIE_SECURE = False  # Session cookie sent only over HTTPS
+SESSION_COOKIE_SECURE = True  # Session cookie sent only over HTTPS
+
+#redirect all http request to be https
+#SECURE_SSL_REDIRECT = True
+
+#Only access the site via https for a particular time
+SECURE_HSTS_SECONDS = 31536000
+
+#include all subdomains in the HSTS policy and allow preloading.
+SECURE_HSTS_INCLUDE_SUBDOMAIN = True
+SECURE_HSTS_RELOAD = True
+
 
 
 # Application definition
@@ -51,6 +62,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bookshelf',
     'csp',
+    'sslserver'
 ]
 
 MIDDLEWARE = [
