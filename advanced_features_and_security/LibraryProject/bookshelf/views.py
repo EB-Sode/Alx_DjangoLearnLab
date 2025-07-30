@@ -24,7 +24,7 @@ def create_book(request):
         author = request.POST.get('author')
         if title and author:
             Book.objects.create(title=title, author=author)
-            return redirect('book_list')  # Adjust to your book list view name
+            return redirect('book_list')  # Adjust to the book list view name
         else:
             error = "Both title and author are required."
             return render(request, 'bookshelf/add_book.html', {'error': error})
