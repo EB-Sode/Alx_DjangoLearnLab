@@ -8,6 +8,7 @@ from rest_framework import generics, filters
 from rest_framework.exceptions import ValidationError
 from rest_framework import permissions
 from rest_framework.authentication import TokenAuthentication
+from django_filters import rest_framework
 
 # Create your views here.
 #class for case ignore while filtering
