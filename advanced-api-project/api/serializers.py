@@ -3,7 +3,7 @@ from .models import Book, Author
 from datetime import datetime
 
 # The serialized models below
-class BookSerializer (serializers.ModelSerializer):
+class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         #include all the fields
@@ -18,7 +18,7 @@ class BookSerializer (serializers.ModelSerializer):
             raise serializers.ValidationError('Choose a year from the past')
         return data
 
-class AuthorSerializer (serializers.ModelSerializer):
+class AuthorSerializer(serializers.ModelSerializer):
 
     '''Serializing the books dynamically with the author'''
     books = BookSerializer(many=True, read_only=True)
