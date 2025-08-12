@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>{{ post.title }}</h1>
+    <p class="post-meta">
+        By {{ post.author }} on {{ post.created_at|date:"F j, Y" }}
+    </p>
+    <div class="post-content">
+        {{ post.content|linebreaks }}
+    </div>
+
+    {% if user == post.author %}
+        <div class="post-actions">
+            <a class="btn btn-secondary" href="{% url 'post_edit' post.pk %}">Edit</a>
+            <a class="btn btn-danger" href="{% url 'post_delete' post.pk %}">Delete</a>
+        </div>
+    {% endif %}
+
+    <a class="btn btn-light" href="{% url 'posts' %}">&larr; Back to All Posts</a>
+</div>
+{% endblock %}

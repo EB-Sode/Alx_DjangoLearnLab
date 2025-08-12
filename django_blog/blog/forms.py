@@ -1,6 +1,11 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from django.core.exceptions import ValidationError
+from .models import Post
+import re
+from django.utils.html import strip_tags
+
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -17,3 +22,52 @@ class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'first_name', 'last_name']
+
+class PostCreationForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title', 'content']
+
+    def clean_title(self):
+        """
+        Custom validation for title field
+        """
+        title = self.cleaned_data.get('title')
+        
+        if not title:
+            raise ValidationError("Title is required.")
+        
+        # Remove extra whitespace
+        title = ' '.join(title.split())
+        
+        # Check minimum length
+        if len(title) < 5:
+            raise ValidationError("Title must be at least 5 characters long.")
+        
+        # Check if title is too generic
+        generic_titles = [
+            'untitled', 'new post', 'blog post', 'my post', 
+            'test', 'hello world', 'sample'
+        ]
+        if title.lower() in generic_titles:
+            raise ValidationError("Please choose a more descriptive title.")
+        
+        
+        return title
+    
+    def clean_content(self):
+        """Custom validation for content field."""
+
+        content = self.cleaned_data.get('content')
+
+        # Strip HTML tags for length validation
+        plain_content = strip_tags(content).strip()
+
+        #watch for max character input in content
+        if len(content) > 5000:
+            raise ValidationError("Content is too long")
+
+        # Check for spam-like content (repeated characters)
+        if re.search(r'(.)\1{10,}', plain_content):
+            raise ValidationError("Content appears to contain spam-like repeated characters.")
+    
