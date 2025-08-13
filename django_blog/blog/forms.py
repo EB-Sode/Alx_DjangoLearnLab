@@ -32,7 +32,8 @@ class PostCreationForm(forms.ModelForm):
         fields = ['title', 'content', 'tags']  # include content here
 
         widgets = {
-            'tags': TagWidget(attrs={'class': 'form-control'}),
+            # 'tags': forms.TextInput(attrs={'placeholder': 'Add tags separated by commas'}),
+            'tags': TagWidget(),
         }
 
     def clean_title(self):
