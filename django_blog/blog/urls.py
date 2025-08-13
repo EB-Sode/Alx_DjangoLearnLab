@@ -1,9 +1,9 @@
 from django.urls import path 
 from django.contrib.auth import views
-from .views import (CustomLoginView, CustomLogoutView, RegisterView, profile, ListPostView, CreatePostView, UpdatePostView, CommentDetailView,
-DetailPostView, DeletePostView, CommentDeleteView, CommentCreateView, CommentUpdateView, PostByTagListView, search_posts)
-from django.views.generic import RedirectView
-from django import views
+from .views import (CustomLoginView, CustomLogoutView, RegisterView, ListPostView, CreatePostView, UpdatePostView, CommentDetailView,
+                    DetailPostView, DeletePostView, CommentDeleteView, CommentCreateView, CommentUpdateView, PostByTagListView, 
+                    profile, search_posts)
+
 
 
 
@@ -31,6 +31,6 @@ urlpatterns = [
 
     #tags views
     path('tags/<slug:tag_slug>/', PostByTagListView.as_view(), name='posts_by_tag'),
-    path('search/', views.search_posts, name='search_posts'),
+    path('search/', search_posts, name='search_posts'),
 ]
 
