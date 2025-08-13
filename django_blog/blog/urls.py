@@ -30,7 +30,7 @@ urlpatterns = [
     path('comment/<int:pk>/', CommentDetailView.as_view(), name='comment_detail'),
 
     #tags views
-    path('tag/<slug:tag_slug>/', views.posts_by_tag, name='posts_by_tag'),
+    path('tag/<tag_name>/', views.posts_by_tag, name='posts_by_tag'),
      path('search/', views.search_posts, name='search_posts'),
 ]
 

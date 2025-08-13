@@ -215,13 +215,13 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return reverse('post_detail', kwargs={'pk': self.object.post.pk})
     
 # Create views for tags
-def posts_by_tag(request, tag_name):
-    tag = get_object_or_404(Tag, name=tag_name)
-    posts = tag.posts.all()
-    return render(request, 'blog/posts_by_tag.html', {'tag': tag, 'posts': posts})
+# def posts_by_tag(request, tag_name):
+#     tag = get_object_or_404(Tag, name=tag_name)
+#     posts = tag.posts.all()
+#     return render(request, 'blog/posts_by_tag.html', {'tag': tag, 'posts': posts})
 
-def posts_by_tag(request, slug):
-    tag = get_object_or_404(Tag, slug=slug)
+def posts_by_tag(request, tag_name):
+    tag = get_object_or_404(Tag, name = tag_name)
     posts = Post.objects.filter(tags__in=[tag])
     return render(request, 'blog/posts_by_tag.html', {'tag': tag, 'posts': posts})
 

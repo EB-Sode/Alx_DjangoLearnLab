@@ -2,7 +2,8 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
-from .models import Post, Comment, Tag
+from .models import Post, Comment
+from taggit.forms import TagWidget
 import re
 from django.utils.html import strip_tags
 
@@ -31,7 +32,7 @@ class PostCreationForm(forms.ModelForm):
         fields = ['title', 'content', 'tags']  # include content here
 
         widgets = {
-            'tags': forms.TextInput(attrs={'placeholder': 'Add tags separated by commas'}),
+            'tags': TagWidget(attrs={'class': 'form-control'}),
         }
 
     def clean_title(self):
