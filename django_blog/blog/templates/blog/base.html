@@ -10,8 +10,15 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <header>
-        <nav>
+    <header>        
+        <nav style="display: flex; justify-content: space-between; align-items: center;">
+            <img src="{% static 'images/logo.png' %}" alt="Blog Logo" style="height: 50px; width: 50px;">
+        <div class="heads" style="color:blanchedalmond">
+            <h1>Django Blog</h1>
+            {% if user.is_authenticated %}
+                <p>Welcome, {{ user.username }}</p>
+            {% endif %}
+        </div>
             <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>
                 <li><a href="{% url 'profile' %}">Profile</a></li>

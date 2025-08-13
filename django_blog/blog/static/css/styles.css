@@ -16,6 +16,10 @@ header {
     text-align: center;
 }
 
+.heads{
+    color: #f22222
+}
+
 header nav ul {
     list-style-type: none;
 }

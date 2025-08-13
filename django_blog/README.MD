@@ -30,6 +30,18 @@ Urls.py:
 Settings.py:
     I ensured the login/logout redirect_url was set accordingly
 
+ADDED VIEWs to the views.py
 
+API CRUD(Not applicable in this app) views and HTML CRUD views
+Also added templates for the crud display, still taking from the base.html
+
+Tested all pages. Ok
+
+ADDED MODELS FOR POST COMMENTS
+-   created a form in forms.py to accept comments 
+-   added CRUD abilities for the comments in views.py
+-   link urls to the views
+-   created updated the post_details template to add comments and added other templates for the comments. 
+-   Had to watch out for the form creation and update the post view to accomodate comments form. 
 
 

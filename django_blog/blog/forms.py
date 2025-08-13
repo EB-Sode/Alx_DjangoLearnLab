@@ -2,11 +2,11 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
-from .models import Post
+from .models import Post, Comment
 import re
 from django.utils.html import strip_tags
 
-
+# Form to create User and edit.
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)
 
@@ -23,10 +23,12 @@ class ProfileEditForm(forms.ModelForm):
         model = User
         fields = ['username', 'email', 'first_name', 'last_name']
 
+
+# Form for creating new blog posts
 class PostCreationForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'content']
+        fields = ['title', 'content']  # include content here
 
     def clean_title(self):
         """
@@ -52,7 +54,6 @@ class PostCreationForm(forms.ModelForm):
         if title.lower() in generic_titles:
             raise ValidationError("Please choose a more descriptive title.")
         
-        
         return title
     
     def clean_content(self):
@@ -70,4 +71,23 @@ class PostCreationForm(forms.ModelForm):
         # Check for spam-like content (repeated characters)
         if re.search(r'(.)\1{10,}', plain_content):
             raise ValidationError("Content appears to contain spam-like repeated characters.")
+
+        return content
     
+    # Comment form and validation
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Write a comment...'}),
+        }
+
+    def clean_commnent(self):
+        '''custome validation for comment field'''
+
+        content = self.cleaned_data.get('content')
+
+        if len(content) > 2000:
+            raise ValidationError('Your comment is too long')
+        
