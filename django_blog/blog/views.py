@@ -1,19 +1,26 @@
-from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post, Comment
 from .forms import CustomUserCreationForm, ProfileEditForm, PostCreationForm, CommentForm
-from django.contrib.auth import login
-from django.contrib.auth.decorators import login_required
-from django.views import View
-from django.views.generic import CreateView, UpdateView, ListView, DetailView, DeleteView
-from django.urls import reverse_lazy, reverse
-from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib import messages
-from rest_framework import generics, permissions
-from rest_framework.permissions import IsAuthenticated 
 from .serializers import PostSerializer
 from .permissions import IsAuthorOrReadOnly
+
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib import messages
+
+from django.contrib.auth import login
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse_lazy, reverse
+
+from django.views import View
+from django.views.generic import CreateView, UpdateView, ListView, DetailView, DeleteView
 from django.views.generic.edit import FormMixin
+
+from rest_framework import generics, permissions
+from rest_framework.permissions import IsAuthenticated
+
+from taggit.models import Tag
+from django.db.models import Q
 
 
 # Create your views here.
@@ -163,7 +170,7 @@ class DeletePostView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 # --- Commment Views(CRUD) ---
 # View for details of comment
 class CommentDetailView(DetailView):
-    model: Comment
+    queryset = Comment.objects.all()
     template_name = 'blog/comment_detail.html'
     context_obj_name = 'comment'
 
@@ -206,3 +213,31 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def get_success_url(self):
         return reverse('post_detail', kwargs={'pk': self.object.post.pk})
+    
+# Create views for tags
+def posts_by_tag(request, tag_name):
+    tag = get_object_or_404(Tag, name=tag_name)
+    posts = tag.posts.all()
+    return render(request, 'blog/posts_by_tag.html', {'tag': tag, 'posts': posts})
+
+def posts_by_tag(request, slug):
+    tag = get_object_or_404(Tag, slug=slug)
+    posts = Post.objects.filter(tags__in=[tag])
+    return render(request, 'blog/posts_by_tag.html', {'tag': tag, 'posts': posts})
+
+# Search views for the comments and post
+def search_posts(request):
+    query = request.GET.get('q', '').strip()
+    results = []
+
+    if query:
+        results = Post.objects.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(tags__name__icontains=query)  # works with django-taggit
+        ).distinct()
+
+    return render(request, 'blog/search_results.html', {
+        'query': query,
+        'results': results
+    })

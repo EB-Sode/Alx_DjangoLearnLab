@@ -45,3 +45,9 @@ ADDED MODELS FOR POST COMMENTS
 -   Had to watch out for the form creation and update the post view to accomodate comments form. 
 
 
+ADDED TAG AND SEARCH FEATURES TO THE POST AND COMMENTS.
+-   Creaeted a tag model with taggit (first install djangotaggit)
+-   added tag features to Post form in forms.py 
+-   Updated the detailsPostview detailscommentsview in views.py to accomodate tagging features
+-   Also added FBV for tag and search(importing Q) and ofcourse, set up the url to direct. 
+-   Created html templates for the tag list and search page.

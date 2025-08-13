@@ -13,7 +13,7 @@
                         <a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a>
                     </h2>
                     <p class="post-meta">
-                        By {{ post.author }} on {{ post.published_date|date:"F j, Y" }}
+                        By {{ post.author }} on {{ post.published_date|date:"F j, Y, g:i a" }}
                     </p>
                     <p>
                         {{ post.content|truncatewords:30 }}

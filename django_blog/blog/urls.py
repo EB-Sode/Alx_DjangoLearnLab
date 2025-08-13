@@ -3,6 +3,7 @@ from django.contrib.auth import views
 from .views import (CustomLoginView, CustomLogoutView, RegisterView, profile, ListPostView, CreatePostView, UpdatePostView, CommentDetailView,
 DetailPostView, DeletePostView, CommentDeleteView, CommentCreateView, CommentUpdateView)
 from django.views.generic import RedirectView
+from . import views
 
 
 
@@ -24,8 +25,12 @@ urlpatterns = [
 
     #Custom Comment views
     path('post/<int:pk>/comments/new/', CommentCreateView.as_view(), name='comment_create'),
-    path('comment/<int:pk>/update/', CommentUpdateView.as_view(), name='comment_edit'),
+    path('comment/<int:pk>/update/', CommentUpdateView.as_view(), name='comment_update'),
     path('comment/<int:pk>/delete/', CommentDeleteView.as_view(), name='comment_delete'),
     path('comment/<int:pk>/', CommentDetailView.as_view(), name='comment_detail'),
+
+    #tags views
+    path('tag/<slug:tag_slug>/', views.posts_by_tag, name='posts_by_tag'),
+     path('search/', views.search_posts, name='search_posts'),
 ]
 
