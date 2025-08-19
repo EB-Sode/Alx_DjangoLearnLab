@@ -4,6 +4,8 @@ from rest_framework import viewsets, filters, permissions
 from django_filters.rest_framework import DjangoFilterBackend
 from .permissions import IsAuthorOrReadOnly
 from .models import Post, Comment
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
 # Create your views here.
@@ -35,3 +37,22 @@ class CommentViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         """Assign logged in user as author"""
         serializer.save(authur=self.request.user)
+
+
+class FeedView(APIView):
+    """Feed of posts from users the current user follows"""
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = request.user  
+
+        # Get the list of users the current user follows
+        following_users = user.following.all()
+
+        # Filter posts by these users
+        posts = Post.objects.filter(author__in=following_users).order_by("-created_at")
+
+        # Serialize posts
+        serializer = PostSerializers(posts, many=True, context={"request": request})
+
+        return Response(serializer.data)

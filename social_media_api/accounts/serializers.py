@@ -6,6 +6,9 @@ from rest_framework.authtoken.models import Token
 #serializing models here
 class UserSerializer(serializers.ModelSerializer):
     '''For displaying user info'''
+    followers_count = serializers.IntegerField(source="followers.count", read_only=True)
+    following_count = serializers.IntegerField(source="following.count", read_only=True)
+
     class Meta:
         model = get_user_model()
         fields = ['id', 'username', 'email']
