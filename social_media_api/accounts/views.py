@@ -9,13 +9,13 @@ from rest_framework.response import Response
 from rest_framework.decorators import action, api_view, permission_classes
 
 
-User = get_user_model()
+CustomerUser = get_user_model()
 
 #views here
 #Registration views + token
 class RegisterView(generics.CreateAPIView):
     '''Views for registeration'''
-    queryset = User.objects.all()
+    queryset = CustomerUser.objects.all()
     serializer_class = RegisterSerializer
     permission_classes = [AllowAny]
 
@@ -60,7 +60,7 @@ class LoginView(APIView):
     
 
 # class UserViewSet(viewsets.ModelViewSet):
-#     queryset = User.objects.all()
+#     queryset = CustomerUser.objects.all()
 #     serializer_class = UserSerializer
 #     permission_classes = [permissions.IsAuthenticated]
 
@@ -91,14 +91,14 @@ class LoginView(APIView):
 #         return Response({"detail": f"You unfollowed {user_to_unfollow.username}."})
     
 class FollowUserView(generics.GenericAPIView):
-    queryset = User.objects.all()
+    queryset = CustomerUser.objects.all()
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, user_id, *args, **kwargs):
         """Follow another user"""
         try:
-            user_to_follow = User.objects.get(pk=user_id)
-        except User.DoesNotExist:
+            user_to_follow = CustomerUser.objects.get(pk=user_id)
+        except CustomerUser.DoesNotExist:
             return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 
         if request.user == user_to_follow:
@@ -112,14 +112,14 @@ class FollowUserView(generics.GenericAPIView):
 
 
 class UnfollowUserView(generics.GenericAPIView):
-    queryset = User.objects.all()
+    queryset = CustomerUser.objects.all()
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, user_id, *args, **kwargs):
         """Unfollow another user"""
         try:
-            user_to_unfollow = User.objects.get(pk=user_id)
-        except User.DoesNotExist:
+            user_to_unfollow = CustomerUser.objects.get(pk=user_id)
+        except CustomerUser.DoesNotExist:
             return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 
         if request.user == user_to_unfollow:
