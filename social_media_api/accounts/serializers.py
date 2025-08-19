@@ -16,7 +16,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only = True)
     class Meta:
         model = get_user_model()
-        fields = ['username', 'email', 'first_name', 'last_name', 'bio', 'profilePicture', 'followers', 'password']
+        fields = ['username', 'email', 'first_name', 'last_name', 'bio', 'profile_picture', 'followers', 'password']
 
     def create(self, validated_data):
         #create user and set followers and token
