@@ -90,39 +90,43 @@ class LoginView(APIView):
 
 #         return Response({"detail": f"You unfollowed {user_to_unfollow.username}."})
     
-@api_view(["POST"])
-@permission_classes([permissions.IsAuthenticated])
-def follow_user(request, user_id):
-    """Follow another user"""
-    try:
-        user_to_follow = User.objects.get(pk=user_id)
-    except User.DoesNotExist:
-        return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+class FollowUserView(generics.GenericAPIView):
+    queryset = User.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
 
-    if request.user == user_to_follow:
-        return Response({"detail": "You cannot follow yourself."},
-                        status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request, user_id, *args, **kwargs):
+        """Follow another user"""
+        try:
+            user_to_follow = User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 
-    request.user.following.add(user_to_follow)
-    user_to_follow.followers.add(request.user)  # keep followers updated
+        if request.user == user_to_follow:
+            return Response({"detail": "You cannot follow yourself."},
+                            status=status.HTTP_400_BAD_REQUEST)
 
-    return Response({"detail": f"You are now following {user_to_follow.username}."})
+        request.user.following.add(user_to_follow)
+        user_to_follow.followers.add(request.user)
+
+        return Response({"detail": f"You are now following {user_to_follow.username}."})
 
 
-@api_view(["POST"])
-@permission_classes([permissions.IsAuthenticated])
-def unfollow_user(request, user_id):
-    """Unfollow another user"""
-    try:
-        user_to_unfollow = User.objects.get(pk=user_id)
-    except User.DoesNotExist:
-        return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+class UnfollowUserView(generics.GenericAPIView):
+    queryset = User.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
 
-    if request.user == user_to_unfollow:
-        return Response({"detail": "You cannot unfollow yourself."},
-                        status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request, user_id, *args, **kwargs):
+        """Unfollow another user"""
+        try:
+            user_to_unfollow = User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 
-    request.user.following.remove(user_to_unfollow)
-    user_to_unfollow.followers.remove(request.user)
+        if request.user == user_to_unfollow:
+            return Response({"detail": "You cannot unfollow yourself."},
+                            status=status.HTTP_400_BAD_REQUEST)
 
-    return Response({"detail": f"You unfollowed {user_to_unfollow.username}."})
+        request.user.following.remove(user_to_unfollow)
+        user_to_unfollow.followers.remove(request.user)
+
+        return Response({"detail": f"You unfollowed {user_to_unfollow.username}."})
