@@ -1,11 +1,13 @@
-from django.shortcuts import render
 from .serializers import PostSerializers, CommentSerializers
-from rest_framework import viewsets, filters, permissions
+from rest_framework import viewsets, filters, permissions, status, generics
 from django_filters.rest_framework import DjangoFilterBackend
 from .permissions import IsAuthorOrReadOnly
 from .models import Post, Comment
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.shortcuts import get_object_or_404
+from .models import Post, Like
+from notifications.models import Notification
 
 
 # Create your views here.
@@ -56,3 +58,45 @@ class FeedView(APIView):
         serializer = PostSerializers(posts, many=True, context={"request": request})
 
         return Response(serializer.data)
+
+
+
+class LikePostView(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, post_id):
+        post = get_object_or_404(Post, id=post_id)
+        user = request.user
+
+        # Check if already liked
+        if Like.objects.filter(post=post, user=user).exists():
+            return Response({"detail": "You already liked this post."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Create the like
+        Like.objects.create(post=post, user=user)
+
+        # Create notification (only if liking someone else’s post)
+        if post.author != user:
+            Notification.objects.create(
+                recipient=post.author,
+                actor=user,
+                verb="liked your post",
+                target=post
+            )
+
+        return Response({"detail": "Post liked successfully."}, status=status.HTTP_201_CREATED)
+
+
+class UnlikePostView(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, post_id):
+        post = get_object_or_404(Post, id=post_id)
+        user = request.user
+
+        like = Like.objects.filter(post=post, user=user).first()
+        if not like:
+            return Response({"detail": "You have not liked this post."}, status=status.HTTP_400_BAD_REQUEST)
+
+        like.delete()
+        return Response({"detail": "Post unliked successfully."}, status=status.HTTP_200_OK)
