@@ -1,13 +1,12 @@
-from django.urls import path, include
-from .views import RegisterView, LoginView, UserViewSet
-from rest_framework.authtoken.views import obtain_auth_token
-from rest_framework.routers import DefaultRouter
+from django.urls import path
+from .views import RegisterView, LoginView, follow_user, unfollow_user
 
-router = DefaultRouter()
-router.register(r'user', UserViewSet, basename='follows')
+
+
 
 urlpatterns = [
     path("register/", RegisterView.as_view(), name="register"),
     path("login/", LoginView.as_view(), name="login"),
-    path('', include (router.urls))
+    path("follow/<int:user_id>/", follow_user, name="follow_user"),
+    path("unfollow/<int:user_id>/", unfollow_user, name="unfollow_user"),
 ]
