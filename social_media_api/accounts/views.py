@@ -11,12 +11,26 @@ from rest_framework.response import Response
 User = get_user_model()
 
 #views here
-#Registration views
+#Registration views + token
 class RegisterView(generics.CreateAPIView):
     '''Views for registeration'''
     queryset = User.objects.all()
     serializer_class = RegisterSerializer
     permission_classes = [AllowAny]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()   # calls RegisterSerializer.create()
+        
+        # create token
+        token, created = Token.objects.get_or_create(user=user)
+
+        return Response({
+            "user": UserSerializer(user).data,
+            "token": token.key
+        }, status=status.HTTP_201_CREATED)
+
 
 #Login + Token retrieval
 class LoginView(APIView):
