@@ -1,12 +1,11 @@
 from .serializers import UserSerializer, RegisterSerializer, LoginSerializer
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token 
-from rest_framework import generics, status, permissions, viewsets
+from rest_framework import generics, status, permissions
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.decorators import action, api_view, permission_classes
 
 
 CustomUser = get_user_model()
@@ -24,8 +23,8 @@ class RegisterView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()   # calls RegisterSerializer.create()
         
-        # create token
-        token, created = Token.objects.get_or_create(user=user)
+        # generate token
+        token, created = Token.objects.get_or_create(user=user) #already created in serializer
 
         return Response({
             "user": UserSerializer(user).data,
@@ -45,14 +44,14 @@ class LoginView(APIView):
 
         username = serializer.validated_data['username']
         password = serializer.validated_data['password']
-        print('We move')
 
         user = authenticate(username=username, password=password)
     
         if not user:
             return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
         
-        token, created = Token.objects.get_or_create(user=user)
+        # generate token
+        token, created = Token.objects.get_or_create(user=user) #already created in serializer
         return Response({
             "token": token.key,
             "user": UserSerializer(user).data
@@ -90,6 +89,8 @@ class LoginView(APIView):
 
 #         return Response({"detail": f"You unfollowed {user_to_unfollow.username}."})
     
+
+    #Create views for following and unfollowing users
 class FollowUserView(generics.GenericAPIView):
     queryset = CustomUser.objects.all()
     permission_classes = [permissions.IsAuthenticated]

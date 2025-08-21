@@ -24,13 +24,3 @@ class Notification(models.Model):
     def __str__(self):
         return f"{self.actor} {self.verb} {self.target} → {self.recipient}"
 
-# class Like(models.Model):
-#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="clicks")
-#     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-#     object_id = models.PositiveIntegerField()
-#     content_object = GenericForeignKey("content_type", "object_id")
-
-#     timestamp = models.DateTimeField(auto_now_add=True)
-
-#     def __str__(self):
-#         return f"{self.user} liked {self.content_object}"

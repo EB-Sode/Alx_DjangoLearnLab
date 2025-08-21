@@ -29,16 +29,8 @@ class Comment(models.Model):
 
 class Like(models.Model):
     '''Model representing a like on a post'''
-    post = models.ForeignKey(
-        "Post", 
-        on_delete=models.CASCADE, 
-        related_name="likes"
-    )
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, 
-        on_delete=models.CASCADE, 
-        related_name="likes"
-    )
+    post = models.ForeignKey("Post", on_delete=models.CASCADE, related_name="likes")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="likes")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

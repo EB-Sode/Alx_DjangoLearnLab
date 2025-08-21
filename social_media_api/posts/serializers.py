@@ -26,11 +26,9 @@ class CommentSerializers(serializers.ModelSerializer):
 
     def create(self, validated_data):
         '''Set author autmotically if request.user is available'''
-
         request = self.context.get('request')
         if request and hasattr(request, 'user'):
-            validated_data ['author'] = request.user
-            
+            validated_data['author'] = request.user
         return super().create(validated_data)
         
 # __POST serializer here__
@@ -49,9 +47,7 @@ class PostSerializers(serializers.ModelSerializer):
 
     def create(self, validated_data):
         '''Set author autmotically if request.user is available'''
-
         request = self.context.get('request')
         if request and hasattr(request, 'user'):
-            validated_data ['author'] = request.user
-            
+            validated_data['author'] = request.user
         return super().create(validated_data)

@@ -55,18 +55,15 @@ class FeedView(APIView):
 
         # Serialize posts
         serializer = PostSerializers(posts, many=True, context={"request": request})
-
         return Response(serializer.data)
 
-
-
-
+# VIEWS FOR LIKE AND UNLIKE POSTS
 class LikePostView(generics.GenericAPIView):
+    '''View to like a post'''
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
         post = generics.get_object_or_404(Post, pk=pk)
-
         like, created = Like.objects.get_or_create(user=request.user, post=post)
 
         if created:
@@ -83,6 +80,7 @@ class LikePostView(generics.GenericAPIView):
 
 
 class UnlikePostView(generics.GenericAPIView):
+    '''View to unlike a post'''
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
