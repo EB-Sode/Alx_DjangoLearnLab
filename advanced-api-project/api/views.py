@@ -22,9 +22,8 @@ class BookFilter(django_filters.FilterSet):
         fields = ['title', 'author', 'publication_year']
 
 #view for listing all books
-class ListView(generics.ListAPIView):
+class ListView(generics.ListCreateAPIView):
     '''Api endpoint that allows books to be viewed, searched, filtered and ordered'''
-
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     authentication_classes = [TokenAuthentication]

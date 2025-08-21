@@ -1,5 +1,4 @@
 from django.urls import path, include
-from .views import BookViewSet
 from rest_framework.routers import DefaultRouter
 from .views import ListView, DetailView, CreateView, UpdateView, DeleteView
 
